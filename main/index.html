@@ -39,6 +39,14 @@ async function getInfo() {
     })
 }
 
+var ws = new WebSocket("ws://" + document.domain + "/ws");
+ws.onopen = function(event) {
+    console.log("ws opened");
+}
+ws.onmessage = function(event) {
+    console.log(event.data);
+}
+
 getInfo();
 </script>
 </html>
