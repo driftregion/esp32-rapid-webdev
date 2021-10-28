@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1.0">
@@ -29,16 +30,37 @@ function jiggle() {
 }
 setInterval(jiggle, 100);
 
-async function getInfo() {
-    fetch("/info")
-    .then(response => {
-        response.text().then(function(text) {
-            document.getElementById("fetched").textContent = "content fetched from ESP32:\n" + text;
-            setTimeout(getInfo, 1000);
-        })
-    })
+// async function getInfo() {
+//     fetch("/info")
+//     .then(response => {
+//         response.text().then(function(text) {
+//             document.getElementById("fetched").textContent = "content fetched from ESP32:\n" + text;
+//             setTimeout(getInfo, 1000);
+//         })
+//     })
+// }
+
+if (!!window.EventSource) {
+  var source = new EventSource('/events');
+
+  source.addEventListener('open', function(e) {
+    console.log("Events Connected");
+  }, false);
+
+  source.addEventListener('error', function(e) {
+    if (e.target.readyState != EventSource.OPEN) {
+      console.log("Events Disconnected");
+    }
+  }, false);
+
+  source.addEventListener('message', function(e) {
+    console.log("message", e.data);
+  }, false);
+
+  source.addEventListener('myevent', function(e) {
+    console.log("myevent", e.data);
+  }, false);
 }
 
-getInfo();
 </script>
 </html>
